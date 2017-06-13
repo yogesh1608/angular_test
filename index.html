@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <title>My first Angular App</title>
+  </head>
+  <body ng-app="MyFirstController">
+    <h1>Shopping List Application</h1>
+    <div class="" ng-controller="AddItemController as itemAdder">
+      <input type="text" ng-model="itemAdder.item" placeholder="Item Name" value="">
+      <input type="text" ng-model="itemAdder.quantity" placeholder="Quantity" value="">
+      <button type="button" ng-click="itemAdder.addItem()" name="button">Add to Cart</button>
+      <br>
+      Cart:
+      <div class="" ng-controller="ShowItemController as showItems">
+        <li ng-repeat="item in showItems.showItem()">
+            {{item.quantity}} of {{item.name}}
+            <button type="button" ng-click="showItems.removeItem($index)" name="button">Remove</button>
+        </li>
+      </div>
+    </div>
+  </body>
+</html>
