@@ -3,12 +3,16 @@
   angular.module("MyFirstController", [])
   .controller("AddItemController", AddItemController)
   .controller("ShowItemController", ShowItemController)
+  .factory("ItemFactory", ItemFactory)
   .service("ItemService", ItemService);
 
-  AddItemController.$inject = ["$scope", "ItemService"];
+  AddItemController.$inject = ["$scope", "ItemService", "ItemFactory"];
 
-  function AddItemController($scope, ItemService)
+  function AddItemController($scope, ItemService, ItemFactory)
   {
+    var tempService = ItemFactory();
+    this.items = tempService.showItem();
+    console.log(this.items);
     this.itemName = "";
     this.quantity = "";
     this.addItem = function ()
@@ -45,8 +49,7 @@
 
     this.showItem = function ()
     {
-      console.log("Hello Yogesh");
-      console.log(items);
+      console.log('Hello');
       return items;
     }
 
@@ -54,6 +57,16 @@
     {
       items.splice(index, 1);
     }
+  }
+
+  function ItemFactory()
+  {
+    var tempService;
+    tempService = function ()
+    {
+      return new ItemService();
+    }
+    return tempService;
   }
 
 })();

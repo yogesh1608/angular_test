@@ -15,7 +15,7 @@
       <br>
       Cart:
       <div class="" ng-controller="ShowItemController as showItems">
-        <li ng-repeat="item in showItems.showItem()">
+        <li ng-repeat="item in itemAdder.items">
             {{item.quantity}} of {{item.name}}
             <button type="button" ng-click="showItems.removeItem($index)" name="button">Remove</button>
         </li>
