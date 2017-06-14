@@ -17,7 +17,7 @@
     this.quantity = "";
     this.addItem = function ()
     {
-      ItemService.addItem(this.item, this.quantity);
+      tempService.addItem(this.item, this.quantity);
     }
   }
 
