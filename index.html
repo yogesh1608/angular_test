@@ -3,22 +3,33 @@
   <head>
     <meta charset="utf-8">
     <script type="text/javascript" src="angular.min.js"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
+    <style media="screen" src="bootstrap.min.css"></style>
     <title>My first Angular App</title>
   </head>
-  <body ng-app="MyFirstController">
-    <h1>Shopping List Application</h1>
-    <div class="" ng-controller="AddItemController as itemAdder">
-      <input type="text" ng-model="itemAdder.item" placeholder="Item Name" value="">
-      <input type="text" ng-model="itemAdder.quantity" placeholder="Quantity" value="">
-      <button type="button" ng-click="itemAdder.addItem()" name="button">Add to Cart</button>
-      <br>
-      Cart:
-      <div class="" ng-controller="ShowItemController as showItems">
-        <li ng-repeat="item in itemAdder.items">
-            {{item.quantity}} of {{item.name}}
-            <button type="button" ng-click="showItems.removeItem($index)" name="button">Remove</button>
-        </li>
+  <body ng-app="MyApp">
+    <div class="row">
+      <h3>Non Restricted Shopping List</h3>
+      <div ng-controller="NonRestrictedController" class="col-sm-6">
+        <div class="row">
+          <input type="text" class="input-sm form-control" placeholder="Item Name" ng-model="itemName" name="" value="">
+          <input type="text" class="input-sm form-control" placeholder="Item Quantity" ng-model="itemQuantity" name="" value="">
+          <button type="button" ng-click="addItems()" class="btn btn-sm" name="button">Add</button>
+        </div>
+        <div class="row">
+          <h5>Shpooing Cart:</h5>
+          <div class="">
+            <ol>
+              <li ng-repeat="item in items">{{item.quantity}} of {{item.name}}</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6" ng-controller="RestrictedController">
+
       </div>
     </div>
   </body>

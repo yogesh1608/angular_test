@@ -1,55 +1,70 @@
 (function ()
 {
-  angular.module("MyFirstController", [])
-  .controller("AddItemController", AddItemController)
-  .controller("ShowItemController", ShowItemController)
-  .factory("ItemFactory", ItemFactory)
-  .service("ItemService", ItemService);
+  angular.module("MyApp", [])
+  .controller("NonRestrictedController", NonRestrictedController)
+  .controller("RestrictedController", RestrictedController)
+  .factory("ItemFactory", ItemFactory);
 
-  AddItemController.$inject = ["$scope", "ItemService", "ItemFactory"];
+  NonRestrictedController.$inject = ["$scope", "ItemFactory"];
 
-  function AddItemController($scope, ItemService, ItemFactory)
+  function NonRestrictedController($scope, ItemFactory)
   {
-    var tempService = ItemFactory();
-    this.items = tempService.showItem();
-    console.log(this.items);
-    this.itemName = "";
-    this.quantity = "";
-    this.addItem = function ()
-    {
-      tempService.addItem(this.item, this.quantity);
-    }
-  }
-
-  ShowItemController.$inject = ["ItemService"];
-  function ShowItemController(ItemService)
-  {
-    this.showItem = function ()
-    {
-      return ItemService.showItem();
-    }
-    this.removeItem = function (index)
-    {
-      ItemService.removeItem(index);
-    }
-  }
-
-  function ItemService()
-  {
-    var items = [];
-    this.addItem = function (itemName, quantity)
-    {
-      var tempItem = {
-        name: itemName,
-        quantity: quantity
-      };
-      console.log("Here");
-      items.push(tempItem);
-    }
-
-    this.showItem = function ()
+    $scope.itemName = "";
+    $scope.itemQuantity = "";
+    var nonRestrictedService = ItemFactory();
+    $scope.addItems = function ()
     {
       console.log('Hello');
+      nonRestrictedService.addItems(this.itemName, this.itemQuantity);
+    }
+    $scope.items = nonRestrictedService.getItems();
+    console.log($scope.itemName);
+    console.log($scope.itemQuantity);
+  }
+
+  RestrictedController.$inject = ["$scope", "ItemFactory"];
+  function RestrictedController($scope, ItemFactory)
+  {
+    $scope.itemName = "";
+    $scope.itemQuantity = "";
+    var restrctedService = ItemFactory(3);
+    $scope.addItems = function ()
+    {
+      try
+      {
+        restrctedService.addItems($scope.itemName, $scope.itemQuantity);
+      }
+      catch (e)
+      {
+        $scope.errorMessage = e.message;
+      }
+    }
+    $scope.items = restrctedService.getItems();
+  }
+
+  function ItemService(maximumQuantity)
+  {
+    var items = [];
+    this.addItems = function (itemName, itemQuantity)
+    {
+      if((maximumQuantity == undefined) || (maximumQuantity != undefined) && items.length < maximumQuantity)
+      {
+        var tempItem = {
+          name: itemName,
+          quantity: itemQuantity
+        };
+        items.push(tempItem);
+        console.log('Here');
+        console.log(items);
+      }
+      else
+      {
+        new error("Item quantity is more than " + maximumQuantity)
+      }
+    }
+
+    this.getItems = function ()
+    {
       return items;
     }
 
@@ -61,12 +76,9 @@
 
   function ItemFactory()
   {
-    var tempService;
-    tempService = function ()
+    return function (maximumQuantity)
     {
-      return new ItemService();
+      return new ItemService(maximumQuantity);
     }
-    return tempService;
   }
-
 })();
