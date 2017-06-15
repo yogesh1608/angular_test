@@ -1,45 +1,35 @@
 (function ()
 {
   angular.module("MyApp", [])
-  .controller("NonRestrictedController", NonRestrictedController)
   .controller("RestrictedController", RestrictedController)
-  .factory("ItemFactory", ItemFactory);
+  .provider("ShoppingListService", ShoppingListServiceProvider)
+  .config(Config);
 
-  NonRestrictedController.$inject = ["$scope", "ItemFactory"];
+  Config.$inject = ["ShoppingListServiceProvider"];
 
-  function NonRestrictedController($scope, ItemFactory)
+  function Config(ShoppingListServiceProvider)
   {
-    $scope.itemName = "";
-    $scope.itemQuantity = "";
-    var nonRestrictedService = ItemFactory();
-    $scope.addItems = function ()
-    {
-      console.log('Hello');
-      nonRestrictedService.addItems(this.itemName, this.itemQuantity);
-    }
-    $scope.items = nonRestrictedService.getItems();
-    console.log($scope.itemName);
-    console.log($scope.itemQuantity);
+    //Change this for changing maxitems, Default is set to 10 on load time.
+    ShoppingListServiceProvider.defaults.maxItems = 5;
   }
 
-  RestrictedController.$inject = ["$scope", "ItemFactory"];
-  function RestrictedController($scope, ItemFactory)
+  RestrictedController.$inject = ["$scope", "ShoppingListService"];
+  function RestrictedController($scope, ShoppingListService)
   {
     $scope.itemName = "";
     $scope.itemQuantity = "";
-    var restrctedService = ItemFactory(3);
     $scope.addItems = function ()
     {
       try
       {
-        restrctedService.addItems($scope.itemName, $scope.itemQuantity);
+        ShoppingListService.addItems($scope.itemName, $scope.itemQuantity);
       }
-      catch (e)
+      catch (error)
       {
-        $scope.errorMessage = e.message;
+        $scope.errorMessage = error.message;
       }
     }
-    $scope.items = restrctedService.getItems();
+    $scope.items = ShoppingListService.getItems();
   }
 
   function ItemService(maximumQuantity)
@@ -59,7 +49,7 @@
       }
       else
       {
-        new error("Item quantity is more than " + maximumQuantity)
+        throw new Error("Item quantity is more than " + maximumQuantity);
       }
     }
 
@@ -74,11 +64,15 @@
     }
   }
 
-  function ItemFactory()
+  function ShoppingListServiceProvider()
   {
-    return function (maximumQuantity)
+    this.defaults = {
+      maxItems: 10
+    };
+
+    this.$get = function ()
     {
-      return new ItemService(maximumQuantity);
-    }
+      return new ItemService(this.defaults.maxItems);
+    };
   }
 })();
