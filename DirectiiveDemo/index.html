@@ -8,6 +8,7 @@
     <script type="text/javascript" src="bootstrap.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
     <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
     <title>My first Angular App</title>
   </head>
   <body ng-app="MyApp">
@@ -21,12 +22,11 @@
           <input type="text" class="col-sm-4 input-sm"  placeholder="Item Quantity" ng-model="itemQuantity" name="" value="">
           <button type="button" ng-click="addItems()" class="btn btn-sm col-sm-4" name="button">Add</button>
         </div>
-        <ol class="list">
-            <list-item-tag ng-repeat="item in items"></list-item-tag>
-        </ol>
-        <div class="has-error" ng-if="errorMessage">
+        <list-item-tag my-attribute="items" title="{{shoppingTitle}}" on-remove="removeItem(index)" remove-item="removeItem"></list-item-tag>
+        <div class="has-error" ng-if="errorMessage" class="error">
           Error Message : {{errorMessage}}
         </div>
+        {{lastRemovedItem}}
       </div>
     </div>
   </body>

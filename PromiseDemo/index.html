@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <title>My first Angular App</title>
+  </head>
+  <body ng-app="MyApp" ng-controller="ShoppingListController">
+    <div class="row">
+      <input type="text" class="input-sm form-control col-sm-3" ng-model="itemName" name="" value="">
+      <input type="text" class="input-sm form-control col-sm-3" ng-model="itemQuantity" name="" value="">
+      <button type="button" class="btn btn-sm btn-primary" ng-click="addItem()" name="button">Add Item</button>
+    </div>
+    <div class="row">
+      <ol class="">
+        <li ng-repeat="item in items">{{item.name}} of {{item.quantity}}</li>
+      </ol>
+    </div>
+  </body>
+</html>

@@ -3,6 +3,8 @@
   angular.module("MyApp", [])
   .controller("RestrictedController", RestrictedController)
   .provider("ShoppingListService", ShoppingListServiceProvider)
+  .directive("itemListDescription", ItemListDescription)
+  .directive("listItemTag", ListItemTag)
   .config(Config);
 
   Config.$inject = ["ShoppingListServiceProvider"];
@@ -11,6 +13,22 @@
   {
     //Change this for changing maxitems, Default is set to 10 on load time.
     ShoppingListServiceProvider.defaults.maxItems = 5;
+  }
+
+  function ListItemTag()
+  {
+    var ddo = {
+      templateUrl: 'listItem.html'
+    }
+    return ddo;
+  }
+
+  function ItemListDescription()
+  {
+    var ddo = {
+      template: '{{item.quantity}} of {{item.name}}'
+    };
+    return ddo;
   }
 
   RestrictedController.$inject = ["$scope", "ShoppingListService"];
